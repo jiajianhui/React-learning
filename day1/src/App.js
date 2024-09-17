@@ -1,6 +1,4 @@
 import { useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
 
 // 测试数据
 const count = 100;
@@ -47,20 +45,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
 
       {/* 1、识别js表达式 */}
       <div>
