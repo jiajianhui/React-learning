@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+// 导入css
+import './index.css'
+
 // 测试数据
 const count = 100;
 function getName() {
@@ -45,7 +48,6 @@ function App() {
 
   return (
     <div className="App">
-
       {/* 1、识别js表达式 */}
       <div>
         {/* 1、传递字符串 */}
@@ -115,6 +117,14 @@ function App() {
           {/* 这里渲染对象的属性 */}
           {myName.name}
         </button>
+      </div>
+
+      {/* 7、样式控制 */}
+      <div>
+        {/* 行内样式（不推荐）；可以将其抽离为变量、多单词的属性名称使用驼峰命名法 */}
+        <span style={{ color: "red", fontSize: "60px" }}>hello</span>
+        {/* class类名控制 */}
+        <span className="text">world</span>
       </div>
     </div>
   );
