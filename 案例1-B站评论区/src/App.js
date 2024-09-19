@@ -55,6 +55,7 @@ const user = {
 
 
 // 导航 Tab 数组
+// 为每一个tab绑定点击事件，点击谁就记录哪个tab，useState中记录的tab与循环遍历中的每一个tab进行比对，若匹配则激活
 const tabs = [
   { type: 'hot', text: '最热' },
   { type: 'time', text: '最新' },
@@ -76,6 +77,13 @@ const App = () => {
     setList(list.filter((item) => item.user.uid !== id));
   }
 
+  // 使用useState管理type值
+  const [type, setType] = useState("hot");
+  // 点击tab函数
+  function handleClick(type) {
+    setType(type);
+  }
+
   return (
     <div className="app">
       {/* 导航 Tab */}
@@ -88,8 +96,15 @@ const App = () => {
           </li>
           <li className="nav-sort">
             {/* 高亮类名： active */}
-            <span className="nav-item">最新</span>
-            <span className="nav-item">最热</span>
+            {tabs.map((item) => (
+              <span
+                className={`nav-item ${item.type === type && "active"}`}
+                key={item.type}
+                onClick={() => handleClick(item.type)}
+              >
+                {item.text}
+              </span>
+            ))}
           </li>
         </ul>
       </div>
