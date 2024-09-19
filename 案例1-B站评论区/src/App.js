@@ -60,11 +60,22 @@ const tabs = [
   { type: 'time', text: '最新' },
 ]
 
-const App = () => {
 
+
+const App = () => {
   // 1、渲染评论列表
   // 使用useState维护评论列表
-  const [list, setList] = useState(defaultList)
+  const [list, setList] = useState(defaultList);
+
+  // 删除评论
+  // 删除显示——条件渲染；删除功能——拿到当前id，以id为条件进行过滤
+
+  // 删除函数
+  function handleDelete(id) {
+    console.log(id);
+    setList(list.filter((item) => item.user.uid !== id));
+  }
+
   return (
     <div className="app">
       {/* 导航 Tab */}
@@ -113,7 +124,11 @@ const App = () => {
               {/* 头像 */}
               <div className="root-reply-avatar">
                 <div className="bili-avatar">
-                  <img className="bili-avatar-img" alt="" src={item.user.avatar} />
+                  <img
+                    className="bili-avatar-img"
+                    alt=""
+                    src={item.user.avatar}
+                  />
                 </div>
               </div>
 
@@ -130,7 +145,16 @@ const App = () => {
                     <span className="reply-time">{item.ctime}</span>
                     {/* 评论数量 */}
                     <span className="reply-time">点赞数:{item.like}</span>
-                    <span className="delete-btn">删除</span>
+
+                    {/* 删除显示——条件渲染 */}
+                    {item.user.uid === user.uid && (
+                      <span
+                        className="delete-btn"
+                        onClick={() => handleDelete(item.user.uid)}
+                      >
+                        删除
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
