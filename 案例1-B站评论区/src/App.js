@@ -2,6 +2,9 @@ import './App.scss'
 import avatar from './images/bozai.png'
 import {useState} from 'react'
 
+// 导入lodash
+import _ from 'lodash'
+
 
 // 评论列表数据
 const defaultList = [
@@ -29,7 +32,7 @@ const defaultList = [
     },
     content: '我寻你千百度 日出到迟暮',
     ctime: '11-13 11:29',
-    like: 88,
+    like: 71,
   },
   {
     rpid: 1,
@@ -66,7 +69,7 @@ const tabs = [
 const App = () => {
   // 1、渲染评论列表
   // 使用useState维护评论列表
-  const [list, setList] = useState(defaultList);
+  const [list, setList] = useState(_.orderBy(defaultList, 'like', 'desc'));
 
   // 删除评论
   // 删除显示——条件渲染；删除功能——拿到当前id，以id为条件进行过滤
@@ -82,6 +85,15 @@ const App = () => {
   // 点击tab函数
   function handleClick(type) {
     setType(type);
+
+    // 数据排序
+    if (type === 'hot') {
+      // 根据点赞量排序
+      setList(_.orderBy(list, "like", "desc"));
+    } else {
+      // 根据创建时间排序
+      setList(_.orderBy(list, "ctime", "desc"));
+    }
   }
 
   return (
