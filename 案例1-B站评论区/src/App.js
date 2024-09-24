@@ -69,7 +69,7 @@ const tabs = [
 const App = () => {
   // 1、渲染评论列表
   // 使用useState维护评论列表
-  const [list, setList] = useState(_.orderBy(defaultList, 'like', 'desc'));
+  const [list, setList] = useState(_.orderBy(defaultList, "like", "desc"));
 
   // 删除评论
   // 删除显示——条件渲染；删除功能——拿到当前id，以id为条件进行过滤
@@ -87,7 +87,7 @@ const App = () => {
     setType(type);
 
     // 数据排序
-    if (type === 'hot') {
+    if (type === "hot") {
       // 根据点赞量排序
       setList(_.orderBy(list, "like", "desc"));
     } else {
@@ -95,6 +95,29 @@ const App = () => {
       setList(_.orderBy(list, "ctime", "desc"));
     }
   }
+
+  // 发表评论
+  // 1、使用useState管理用户输入数据，与表单数据绑定
+  const [content, setContent] = useState("");
+  // 2、发布按钮函数——将用户输入的数据放入list中（本质上是修改list，所以调用setList方法）
+  const handlePublish = () => {
+    // list是useState维护的，只能替换而不能修改它
+    setList([
+      ...list,
+      // 新增数据的结构与之前的数据结构保持一致
+      {
+        rpid: 2,
+        user: {
+          uid: "36080105",
+          avatar: "",
+          uname: "许嵩",
+        },
+        content: content,
+        ctime: "11-13 11:29",
+        like: 71,
+      },
+    ]);
+  };
 
   return (
     <div className="app">
@@ -135,10 +158,14 @@ const App = () => {
             <textarea
               className="reply-box-textarea"
               placeholder="发一条友善的评论"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
             />
             {/* 发布按钮 */}
             <div className="reply-box-send">
-              <div className="send-text">发布</div>
+              <div className="send-text" onClick={handlePublish}>
+                发布
+              </div>
             </div>
           </div>
         </div>
