@@ -1,9 +1,13 @@
 import './App.scss'
 import avatar from './images/bozai.png'
-import {useState} from 'react'
+import {useRef, useState} from 'react'
 
 // 导入lodash
 import _ from 'lodash'
+
+// 导入uuid和dayjs
+import {v4 as uuidv4} from 'uuid'
+import dayjs from 'dayjs'
 
 
 // 评论列表数据
@@ -82,6 +86,8 @@ const App = () => {
 
   // 使用useState管理type值
   const [type, setType] = useState("hot");
+  // 使用useRef获取Dom元素
+  const inputRef = useRef(null)
   // 点击tab函数
   function handleClick(type) {
     setType(type);
@@ -106,17 +112,22 @@ const App = () => {
       ...list,
       // 新增数据的结构与之前的数据结构保持一致
       {
-        rpid: 2,
+        rpid: uuidv4(), //生成随机id
         user: {
           uid: "36080105",
           avatar: "",
           uname: "许嵩",
         },
         content: content,
-        ctime: "11-13 11:29",
+        ctime: dayjs(new Date()).format('MM-DD HH:mm'), //格式化 月-日 时:分
         like: 71,
       },
     ]);
+
+    // 3、清空input框
+    setContent('')
+    // 4、input框重新获取焦点——使用useRef
+    inputRef.current.focus()
   };
 
   return (
@@ -160,6 +171,7 @@ const App = () => {
               placeholder="发一条友善的评论"
               value={content}
               onChange={(e) => setContent(e.target.value)}
+              ref={inputRef}
             />
             {/* 发布按钮 */}
             <div className="reply-box-send">
