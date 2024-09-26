@@ -18,6 +18,20 @@ function Son(props) {
   );
 }
 
+// 兄弟组件——在B中获取A中的信息
+function A(props) {
+  return (
+    <div>this is A compnent {props.aaa}</div>
+  )
+}
+function B({getName}) {
+  return (
+    <div>
+      this is B compnent <button onClick={() => getName('1')}>向A发送内容</button>
+    </div>
+  );
+}
+
 function App() {
 
   const [value, setValue] = useState('')
@@ -34,6 +48,12 @@ function App() {
   const getMsg = (msg) => {
     console.log(msg);
   }
+
+  // 兄弟通信方法
+  const  getName = (name) => {
+    setAAA(name)
+  }
+  const [aaa, setAAA] = useState('')
 
   return (
     <div className="App">
@@ -55,6 +75,12 @@ function App() {
 
       {/* 4、组件通信；子传父 */}
       <Son getMsg={getMsg}></Son>
+
+      {/* 5、兄弟通信——B向A发送内容 */}
+      <div>
+        <A aaa={aaa} />
+        <B getName={getName} />
+      </div>
     </div>
   );
 }
