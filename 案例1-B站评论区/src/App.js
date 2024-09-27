@@ -88,6 +88,51 @@ function useGetList() {
 }
 
 
+// 封装评论项组件
+function Item({ item, handleDelete }) {
+  return (
+    <div className="reply-list">
+      {/* 评论项 */}
+      <div className="reply-item">
+        {/* 头像 */}
+        <div className="root-reply-avatar">
+          <div className="bili-avatar">
+            <img className="bili-avatar-img" alt="" src={item.user.avatar} />
+          </div>
+        </div>
+
+        <div className="content-wrap">
+          {/* 用户名 */}
+          <div className="user-info">
+            <div className="user-name">{item.user.uname}</div>
+          </div>
+          {/* 评论内容 */}
+          <div className="root-reply">
+            <span className="reply-content">{item.content}</span>
+            <div className="reply-info">
+              {/* 评论时间 */}
+              <span className="reply-time">{item.ctime}</span>
+              {/* 评论数量 */}
+              <span className="reply-time">点赞数:{item.like}</span>
+
+              {/* 删除显示——条件渲染 */}
+              {item.user.uid === user.uid && (
+                <span
+                  className="delete-btn"
+                  onClick={() => handleDelete(item.user.uid)}
+                >
+                  删除
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 
 const App = () => {
   // 1、渲染评论列表
@@ -102,7 +147,7 @@ const App = () => {
   // 删除显示——条件渲染；删除功能——拿到当前id，以id为条件进行过滤
 
   // 删除函数
-  function handleDelete(id) {
+  const handleDelete = (id) => {
     console.log(id);
     setList(list.filter((item) => item.user.uid !== id));
   }
@@ -207,48 +252,7 @@ const App = () => {
         {/* 评论列表 */}
         {/* 2、渲染列表 */}
         {list.map((item) => (
-          <div className="reply-list" key={item.rpid}>
-            {/* 评论项 */}
-            <div className="reply-item">
-              {/* 头像 */}
-              <div className="root-reply-avatar">
-                <div className="bili-avatar">
-                  <img
-                    className="bili-avatar-img"
-                    alt=""
-                    src={item.user.avatar}
-                  />
-                </div>
-              </div>
-
-              <div className="content-wrap">
-                {/* 用户名 */}
-                <div className="user-info">
-                  <div className="user-name">{item.user.uname}</div>
-                </div>
-                {/* 评论内容 */}
-                <div className="root-reply">
-                  <span className="reply-content">{item.content}</span>
-                  <div className="reply-info">
-                    {/* 评论时间 */}
-                    <span className="reply-time">{item.ctime}</span>
-                    {/* 评论数量 */}
-                    <span className="reply-time">点赞数:{item.like}</span>
-
-                    {/* 删除显示——条件渲染 */}
-                    {item.user.uid === user.uid && (
-                      <span
-                        className="delete-btn"
-                        onClick={() => handleDelete(item.user.uid)}
-                      >
-                        删除
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Item key={item.rpid} item={item} handleDelete={handleDelete} />
         ))}
       </div>
     </div>
