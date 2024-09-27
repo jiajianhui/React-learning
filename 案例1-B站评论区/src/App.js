@@ -69,6 +69,24 @@ const tabs = [
   { type: 'time', text: '最新' },
 ]
 
+// 封装请求数据的Hook
+function useGetList() {
+  const [list, setList] = useState([]);
+  // 1.1、使用useEffect获取数据
+  useEffect(() => {
+    async function getList() {
+      const res = await axions.get("http://localhost:3004/list");
+      setList(res.data);
+    }
+    getList();
+  }, []);
+
+  return {
+    list,
+    setList
+  }
+}
+
 
 
 const App = () => {
@@ -77,16 +95,8 @@ const App = () => {
   // const [list, setList] = useState(_.orderBy(defaultList, "like", "desc"));
 
   // 1、渲染评论列表，使用接口的方式
-  const [list, setList] = useState([]);
-  // 1.1、使用useEffect获取数据
-  useEffect(() => {
-    async function getList() {
-      const res = await axions.get("http://localhost:3004/list");
-      setList(res.data)
-      
-    }
-    getList()
-  }, [])
+  // 调用请求数据的Hook，获得对应的状态和方法
+  const { list, setList } = useGetList();
 
   // 删除评论
   // 删除显示——条件渲染；删除功能——拿到当前id，以id为条件进行过滤
