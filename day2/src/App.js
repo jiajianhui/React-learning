@@ -65,6 +65,30 @@ function E() {
   )
 }
 
+ // 自定义Hook函数
+// 封装思路：
+// 1、声明一个以use打头的函数
+// 2、在函数体内封装可复用的逻辑
+// 3、将组件中用到的状态或者回调return出去（数组或对象）
+// 4、在哪个组件中要用这个逻辑，就执行这个Hook，解构出对应的状态或回调
+
+// ReactHook（一切use打头的函数）使用规则
+// 1、只能在组件中或者其他自定义Hook函数中调用
+// 2、只能在组件的顶层调用，不能嵌套在if、for、其他函数中
+function useToggle() {
+  // 可复用逻辑
+  const [showDiv, setDiv] = useState(true);
+  const toggleDiv = () => {
+    setDiv(!showDiv);
+  }
+
+  // 将状态或回调return出去，方便其他组件使用
+  return {
+    showDiv,
+    toggleDiv
+  }
+}
+
 
 
 function App() {
@@ -111,8 +135,15 @@ function App() {
 
   }, [])
 
-  // 是否展示E组件
+  // 清除副作用——是否展示E组件
   const [showE, setE] = useState(true)
+
+
+  // 调用自定义Hook，将对应的状态和回调解构出来，供App组件使用
+  const { showDiv, toggleDiv } = useToggle();
+ 
+  
+  
 
   return (
     <div className="App">
@@ -153,10 +184,16 @@ function App() {
         {channels.map(item => <li key={item.id}>{item.name}</li>)}
       </ul>
 
-      {/* 清除副作用——组件卸载时，清除定时器 */}
+      {/* 8、清除副作用——组件卸载时，清除定时器 */}
       <div>
         {showE && <E />}
         <button onClick={() => setE(false)}>卸载E组件</button>
+      </div>
+
+      {/* 9、自定义Hook函数 */}
+      <div>
+        {showDiv && <div>Div</div>}
+        <button onClick={() => toggleDiv()}>toggleDiv</button>
       </div>
     </div>
   );
