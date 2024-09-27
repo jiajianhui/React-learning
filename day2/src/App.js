@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useRef } from 'react';
 
 // 父传子
@@ -32,6 +32,41 @@ function B({getName}) {
   );
 }
 
+// 跨层级通信
+const AppContext = createContext()
+function C() {
+  return(
+    <div>this is C component <D /> </div>
+  )
+}
+function D() {
+  // 使用useContext获取数据
+  const data = useContext(AppContext);
+  return <div>this is D component, {data}</div>;
+}
+
+// 清除副作用
+function E() {
+  
+  useEffect(() => {
+    // 开启定时器
+    const timer = setInterval(() => {
+      console.log("定时器执行中");
+    }, 1000);
+
+    // 组件卸载时自动执行回调（清除副作用）
+    return () => {
+      clearInterval(timer);
+    }
+  }, [])
+
+  return (
+    <span>this is E component</span>
+  )
+}
+
+
+
 function App() {
 
   const [value, setValue] = useState('')
@@ -54,6 +89,30 @@ function App() {
     setAAA(name)
   }
   const [aaa, setAAA] = useState('')
+
+  // 跨层级通信
+  const appMsg = 'App'
+
+  // useEffect；React Hook函数，用于在组件中（App）创建由渲染本身引起的操作（渲染完成后执行回调函数）
+  // 参数1——回调函数（副作用函数）；参数2——数组，依赖项，设置执行机制
+  // 关于依赖项——1、没有依赖项的话，组件初始渲染+组件更新时执行回调；2、空数组依赖，只在初识渲染时执行一次回调；3、添加特定依赖项，组件初始渲染+特定依赖项变化时执行回调
+  const URL = 'http://geek.itheima.net/v1_0/channels'
+  const [channels, setChannels] = useState([])
+  useEffect(() => {
+    async function getList() {
+      const res = await fetch(URL);
+      // res.json() 是一个异步方法，它会读取 Response 对象的正文，将其解析成 JSON 格式
+      const jsonData = await res.json();
+      console.log(jsonData);
+
+      setChannels(jsonData.data.channels);
+    }
+    getList()
+
+  }, [])
+
+  // 是否展示E组件
+  const [showE, setE] = useState(true)
 
   return (
     <div className="App">
@@ -80,6 +139,24 @@ function App() {
       <div>
         <A aaa={aaa} />
         <B getName={getName} />
+      </div>
+
+      {/* 6、使用context机制跨层级传递数据 */}
+      {/* 6.1使用createContext方法创建上下文对象Ctx；6.2在顶层组件中通过Ctx.Provider组件提供数据；6.3在底层组件中通过useContext钩子函数获取消费数据 */}
+      <AppContext.Provider value={appMsg}>
+        this is app
+        <C />
+      </AppContext.Provider>
+
+      {/* 7、useEffect */}
+      <ul>
+        {channels.map(item => <li key={item.id}>{item.name}</li>)}
+      </ul>
+
+      {/* 清除副作用——组件卸载时，清除定时器 */}
+      <div>
+        {showE && <E />}
+        <button onClick={() => setE(false)}>卸载E组件</button>
       </div>
     </div>
   );
