@@ -1,6 +1,7 @@
 import './App.scss'
 import avatar from './images/bozai.png'
-import {useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
+import axions from 'axios'
 
 // 导入lodash
 import _ from 'lodash'
@@ -73,7 +74,19 @@ const tabs = [
 const App = () => {
   // 1、渲染评论列表
   // 使用useState维护评论列表
-  const [list, setList] = useState(_.orderBy(defaultList, "like", "desc"));
+  // const [list, setList] = useState(_.orderBy(defaultList, "like", "desc"));
+
+  // 1、渲染评论列表，使用接口的方式
+  const [list, setList] = useState([]);
+  // 1.1、使用useEffect获取数据
+  useEffect(() => {
+    async function getList() {
+      const res = await axions.get("http://localhost:3004/list");
+      setList(res.data)
+      
+    }
+    getList()
+  }, [])
 
   // 删除评论
   // 删除显示——条件渲染；删除功能——拿到当前id，以id为条件进行过滤
@@ -87,7 +100,7 @@ const App = () => {
   // 使用useState管理type值
   const [type, setType] = useState("hot");
   // 使用useRef获取Dom元素
-  const inputRef = useRef(null)
+  const inputRef = useRef(null);
   // 点击tab函数
   function handleClick(type) {
     setType(type);
@@ -119,15 +132,15 @@ const App = () => {
           uname: "许嵩",
         },
         content: content,
-        ctime: dayjs(new Date()).format('MM-DD HH:mm'), //格式化 月-日 时:分
+        ctime: dayjs(new Date()).format("MM-DD HH:mm"), //格式化 月-日 时:分
         like: 71,
       },
     ]);
 
     // 3、清空input框
-    setContent('')
+    setContent("");
     // 4、input框重新获取焦点——使用useRef
-    inputRef.current.focus()
+    inputRef.current.focus();
   };
 
   return (
