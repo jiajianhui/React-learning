@@ -4,10 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// 为react注入store——react-redux负责把redux和react连接起来，内置Provider组件，通过store参数把创建好的store实例注入到应用中，建立连接
+import store from './store';
+import {Provider} from 'react-redux'
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
 

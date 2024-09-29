@@ -1,23 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+// 在react组件中使用store中的数据——借用useSelector函数，它的作用是把store中的数据映射到组件中
+import { useSelector, useDispatch } from "react-redux";
+
+// react组件中修改store中的数据——借用useDispatch函数，它的作用是生成提交action对象的dispatch函数
+import { decrement, inscrement } from "./store/modules/counterStore";
 
 function App() {
+  const { count } = useSelector((state) => state.counter); //这里的counter对应的是根store中reducer对象中的counter
+  const dispatch = useDispatch();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={() => dispatch(decrement())}>-</button>
+      {count}
+      <button onClick={() => dispatch(inscrement())}>+</button>
     </div>
   );
 }
