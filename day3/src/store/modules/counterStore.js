@@ -16,14 +16,19 @@ const counterStore = createSlice({
     decrement(state) {
       state.count++;
     },
+
+    // 提交action传参
+    addToNum(state, action) {
+      state.count += action.payload;  //参数会被传递到action对象的payload属性上
+    },
   },
 });
 
 // 解构actions
-const {inscrement, decrement} = counterStore.actions
+const { inscrement, decrement, addToNum } = counterStore.actions;
 // 获取reducer
 const reducer = counterStore.reducer
 
 // 导出
-export { inscrement, decrement };
+export { inscrement, decrement, addToNum };
 export default reducer
