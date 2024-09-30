@@ -3,8 +3,14 @@ import { createRoot } from 'react-dom/client'
 
 import App from './App'
 
+// 注入store
+import {Provider} from 'react-redux'
+import store from './store'
+
 
 const root = createRoot(document.getElementById('root'))
 root.render(
-  <App />
-)
+  <Provider store={store}>
+    <App />
+  </Provider>
+);

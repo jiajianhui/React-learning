@@ -5,64 +5,88 @@ import FoodsCategory from './components/FoodsCategory'
 
 import './App.scss'
 
-const foodsList = [
-  {
-    "tag": "318569657",
-    "name": "一人套餐",
-    "foods": [
-      {
-        "id": 8078956697,
-        "name": "烤羊肉串(10串)",
-        "like_ratio_desc": "好评度100%",
-        "month_saled": 40,
-        "unit": "10串",
-        "food_tag_list": ["点评网友推荐"],
-        "price": 90,
-        "picture": "https://zqran.gitee.io/images/waimai/8078956697.jpg",
-        "description": "",
-        "tag": "318569657"
-      },
-      {
-        "id": 7384994864,
-        "name": "腊味煲仔饭",
-        "like_ratio_desc": "好评度81%",
-        "month_saled": 100,
-        "unit": "1人份",
-        "food_tag_list": [],
-        "price": 39,
-        "picture": "https://zqran.gitee.io/images/waimai/7384994864.jpg",
-        "description": "",
-        "tag": "318569657"
-      },
-      {
-        "id": 2305772036,
-        "name": "鸡腿胡萝卜焖饭",
-        "like_ratio_desc": "好评度91%",
-        "month_saled": 300,
-        "unit": "1人份",
-        "food_tag_list": [],
-        "price": 34.32,
-        "picture": "https://zqran.gitee.io/images/waimai/2305772036.jpg",
-        "description": "主料：大米、鸡腿、菜心、胡萝卜",
-        "tag": "318569657"
-      },
-      {
-        "id": 2233861812,
-        "name": "小份酸汤莜面鱼鱼+肉夹馍套餐",
-        "like_ratio_desc": "好评度73%",
-        "month_saled": 600,
-        "unit": "1人份",
-        "food_tag_list": ["“口味好,包装很好～点赞”"],
-        "price": 34.32,
-        "picture": "https://zqran.gitee.io/images/waimai/2233861812.jpg",
-        "description": "酸汤莜面鱼鱼，主料：酸汤、莜面 肉夹馍，主料：白皮饼、猪肉",
-        "tag": "318569657"
-      }
-    ]
-  }
-]
+// 1、通过useSelector拿到store中的数据
+import { useSelector } from 'react-redux'
+
+// 2、使用useDispatch生成dispatch函数，将action对象传入即可出发修改state的函数
+import { useDispatch } from 'react-redux'
+
+// 3、使用useEffect进行初始化操作
+import { useEffect } from 'react'
+
+// 4、导入获取数据的异步方法（action对象）
+import { fetchFoodsList } from './store/modules/takeaway'
+
+
+// const foodsList = [
+//   {
+//     "tag": "318569657",
+//     "name": "一人套餐",
+//     "foods": [
+//       {
+//         "id": 8078956697,
+//         "name": "烤羊肉串(10串)",
+//         "like_ratio_desc": "好评度100%",
+//         "month_saled": 40,
+//         "unit": "10串",
+//         "food_tag_list": ["点评网友推荐"],
+//         "price": 90,
+//         "picture": "https://zqran.gitee.io/images/waimai/8078956697.jpg",
+//         "description": "",
+//         "tag": "318569657"
+//       },
+//       {
+//         "id": 7384994864,
+//         "name": "腊味煲仔饭",
+//         "like_ratio_desc": "好评度81%",
+//         "month_saled": 100,
+//         "unit": "1人份",
+//         "food_tag_list": [],
+//         "price": 39,
+//         "picture": "https://zqran.gitee.io/images/waimai/7384994864.jpg",
+//         "description": "",
+//         "tag": "318569657"
+//       },
+//       {
+//         "id": 2305772036,
+//         "name": "鸡腿胡萝卜焖饭",
+//         "like_ratio_desc": "好评度91%",
+//         "month_saled": 300,
+//         "unit": "1人份",
+//         "food_tag_list": [],
+//         "price": 34.32,
+//         "picture": "https://zqran.gitee.io/images/waimai/2305772036.jpg",
+//         "description": "主料：大米、鸡腿、菜心、胡萝卜",
+//         "tag": "318569657"
+//       },
+//       {
+//         "id": 2233861812,
+//         "name": "小份酸汤莜面鱼鱼+肉夹馍套餐",
+//         "like_ratio_desc": "好评度73%",
+//         "month_saled": 600,
+//         "unit": "1人份",
+//         "food_tag_list": ["“口味好,包装很好～点赞”"],
+//         "price": 34.32,
+//         "picture": "https://zqran.gitee.io/images/waimai/2233861812.jpg",
+//         "description": "酸汤莜面鱼鱼，主料：酸汤、莜面 肉夹馍，主料：白皮饼、猪肉",
+//         "tag": "318569657"
+//       }
+//     ]
+//   }
+// ]
 
 const App = () => {
+  // 2、拿到store中的数据
+  const {foodsList} = useSelector(state => state.foods); //这里的foods是组合子模块中reducer中的foods
+
+  // 获得dispatch函数
+  const dispatch = useDispatch()
+
+  // 1、初始化获取数据
+  useEffect(() => {
+    // 触发action
+    dispatch(fetchFoodsList());
+  }, [dispatch])
 
   return (
     <div className="home">
@@ -72,12 +96,12 @@ const App = () => {
       {/* 内容 */}
       <div className="content-wrap">
         <div className="content">
-          <Menu />
+          <Menu foodsList={foodsList} />
 
           <div className="list-content">
             <div className="goods-list">
               {/* 外卖商品列表 */}
-              {foodsList.map(item => {
+              {foodsList.map((item) => {
                 return (
                   <FoodsCategory
                     key={item.tag}
@@ -86,7 +110,7 @@ const App = () => {
                     // 列表商品
                     foods={item.foods}
                   />
-                )
+                );
               })}
             </div>
           </div>
@@ -96,7 +120,7 @@ const App = () => {
       {/* 购物车 */}
       <Cart />
     </div>
-  )
+  );
 }
 
 export default App

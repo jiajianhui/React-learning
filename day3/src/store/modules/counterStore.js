@@ -29,6 +29,8 @@ const { inscrement, decrement, addToNum } = counterStore.actions;
 // 获取reducer
 const reducer = counterStore.reducer
 
-// 导出
+// 导出action对象
 export { inscrement, decrement, addToNum };
+
+// 导出该模块
 export default reducer
