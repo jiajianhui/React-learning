@@ -14,7 +14,7 @@ function App() {
   // 使用useEffect触发异步请求获取列表
   useEffect(() => {
     dispatch(fetchChannelList())
-  })
+  }, [dispatch])
 
   return (
     <div className="App">
