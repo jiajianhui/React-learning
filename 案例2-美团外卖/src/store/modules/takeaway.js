@@ -9,7 +9,10 @@ const foodsStore = createSlice({
     // 1、初始化状态
     initialState: {
         // 商品列表
-        foodsList: []
+        foodsList: [],
+
+        // 激活项
+        activeIndex: 0
     },
 
     // 2、状态修改方法
@@ -17,11 +20,15 @@ const foodsStore = createSlice({
         // 同步修改方法
         setFoodsList(state, action) {
             state.foodsList = action.payload
+        },
+
+        setIndex(state, action) {
+            state.activeIndex = action.payload
         }
     }
 })
 // 3、解构出修改状态的方法；生成是action对象（Redux中修改store中数据的方法只有一种，就是提交（dispatch）action对象）
-const {setFoodsList} = foodsStore.actions
+const { setFoodsList, setIndex } = foodsStore.actions;
 // 4、异步获取方法
 const fetchFoodsList = () => {
     return async (dispatch) => {
@@ -34,7 +41,7 @@ const fetchFoodsList = () => {
 }
 
 // 5、导出异步获取方法
-export { fetchFoodsList };
+export { fetchFoodsList, setIndex };
 
 // 6、默认导出该模块
 const reducer = foodsStore.reducer  
