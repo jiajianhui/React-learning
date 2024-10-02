@@ -40,7 +40,7 @@ const fetchFoodsList = () => {
     };
 }
 
-// 5、导出异步获取方法
+// 5、导出异步获取数据的方法、更改activeIndex的方法
 export { fetchFoodsList, setIndex };
 
 // 6、默认导出该模块

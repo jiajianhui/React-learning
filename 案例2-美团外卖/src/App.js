@@ -77,7 +77,7 @@ import { fetchFoodsList } from './store/modules/takeaway'
 
 const App = () => {
   // 2、拿到store中的数据
-  const {foodsList} = useSelector(state => state.foods); //这里的foods是组合子模块中reducer中的foods
+  const {foodsList, activeIndex} = useSelector(state => state.foods); //这里的foods是组合子模块中reducer中的foods
 
   // 获得dispatch函数
   const dispatch = useDispatch()
@@ -101,9 +101,11 @@ const App = () => {
           <div className="list-content">
             <div className="goods-list">
               {/* 外卖商品列表 */}
-              {foodsList.map((item) => {
+              {foodsList.map((item, index) => {
                 return (
-                  <FoodsCategory
+                  // 根据点击左侧的分类列表来动态渲染右侧的商品列表
+                  // 核心——左侧分类列表的数据源与右侧商品列表的数据源一样
+                  activeIndex === index && <FoodsCategory
                     key={item.tag}
                     // 列表标题
                     name={item.name}
