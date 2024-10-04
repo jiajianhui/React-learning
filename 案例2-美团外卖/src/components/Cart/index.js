@@ -9,6 +9,7 @@ import {
   decreCount,
   clearCount,
 } from "../../store/modules/takeaway"; 
+import { useState } from 'react';
 
 const Cart = () => {
   // 从store中获取数据
@@ -22,18 +23,31 @@ const Cart = () => {
   const cart = cartList;
 
   const dispatch = useDispatch()
+
+  // 控制购物车显示和隐藏
+  const [visible, setVisible] =useState(false)
+  const showCart = () => {
+    if (cartList.length === 0) {
+      return
+    }
+    setVisible(true)
+  }
+
   
   return (
     <div className="cartContainer">
       {/* 遮罩层 添加visible类名可以显示出来 */}
       <div
-        className={classNames('cartOverlay')}
+        className={classNames("cartOverlay", visible && "visible")}
+        onClick={() => setVisible(false)}
       />
-      <div className="cart">
+      <div className="cart" onClick={showCart}>
         {/* fill 添加fill类名可以切换购物车状态*/}
         {/* 购物车数量 */}
-        <div className={classNames('icon', cartList.length > 0 && 'fill')}>
-          {cartList.length > 0 && <div className="cartCornerMark">{cartList.length}</div>}
+        <div className={classNames("icon", cartList.length > 0 && "fill")}>
+          {cartList.length > 0 && (
+            <div className="cartCornerMark">{cartList.length}</div>
+          )}
         </div>
         {/* 购物车价格 */}
         <div className="main">
@@ -54,7 +68,7 @@ const Cart = () => {
         )}
       </div>
       {/* 添加visible类名 div会显示出来 */}
-      <div className={classNames('cartPanel', 'visible')}>
+      <div className={classNames("cartPanel", visible && "visible")}>
         <div className="header">
           <span className="text">购物车</span>
           <span className="clearCart" onClick={() => dispatch(clearCount())}>
@@ -64,7 +78,7 @@ const Cart = () => {
 
         {/* 购物车列表 */}
         <div className="scrollArea">
-          {cart.map(item => {
+          {cart.map((item) => {
             return (
               <div className="cartItem" key={item.id}>
                 <img className="shopPic" src={item.picture} alt="" />
@@ -92,7 +106,7 @@ const Cart = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Cart
