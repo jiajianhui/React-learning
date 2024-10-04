@@ -1,7 +1,14 @@
 import classNames from 'classnames'
 import Count from '../Count'
 import './index.scss'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+
+// 导入增减reducer
+import {
+  increCount,
+  decreCount,
+  clearCount,
+} from "../../store/modules/takeaway"; 
 
 const Cart = () => {
   // 从store中获取数据
@@ -12,7 +19,10 @@ const Cart = () => {
     return a + c.price * c.count;
   }, 0)
 
-  const cart = []
+  const cart = cartList;
+
+  const dispatch = useDispatch()
+  
   return (
     <div className="cartContainer">
       {/* 遮罩层 添加visible类名可以显示出来 */}
@@ -44,10 +54,10 @@ const Cart = () => {
         )}
       </div>
       {/* 添加visible类名 div会显示出来 */}
-      <div className={classNames('cartPanel')}>
+      <div className={classNames('cartPanel', 'visible')}>
         <div className="header">
           <span className="text">购物车</span>
-          <span className="clearCart">
+          <span className="clearCart" onClick={() => dispatch(clearCount())}>
             清空购物车
           </span>
         </div>
@@ -68,12 +78,16 @@ const Cart = () => {
                   </div>
                 </div>
                 <div className="skuBtnWrapper btnGroup">
+                  {/* Count组件 */}
                   <Count
                     count={item.count}
+                    // 将对象参数传入reducer函数，即可找到对应的商品进行增减
+                    onPlus={() => dispatch(increCount(item))}
+                    onMinus={() => dispatch(decreCount(item))}
                   />
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       </div>
