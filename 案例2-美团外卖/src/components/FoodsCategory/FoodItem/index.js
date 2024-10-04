@@ -63,7 +63,7 @@ const Foods = ({
                 )
               }
             >
-              +
+              
             </span>
           </div>
         </div>

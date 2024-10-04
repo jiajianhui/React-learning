@@ -1,8 +1,17 @@
 import classNames from 'classnames'
 import Count from '../Count'
 import './index.scss'
+import { useSelector } from 'react-redux'
 
 const Cart = () => {
+  // 从store中获取数据
+  // 1、获取添加商品的数量
+  const {cartList} = useSelector(state => state.foods)
+  // 2、计算总价
+  const totalPrice = cartList.reduce((a, c) => {
+    return a + c.price * c.count;
+  }, 0)
+
   const cart = []
   return (
     <div className="cartContainer">
@@ -13,21 +22,22 @@ const Cart = () => {
       <div className="cart">
         {/* fill 添加fill类名可以切换购物车状态*/}
         {/* 购物车数量 */}
-        <div className={classNames('icon')}>
-          {true && <div className="cartCornerMark">{0}</div>}
+        <div className={classNames('icon', cartList.length > 0 && 'fill')}>
+          {cartList.length > 0 && <div className="cartCornerMark">{cartList.length}</div>}
         </div>
         {/* 购物车价格 */}
         <div className="main">
           <div className="price">
             <span className="payableAmount">
               <span className="payableAmountUnit">¥</span>
-              {0.00}
+              {/* 保留小数点后两位 */}
+              {totalPrice.toFixed(2)}
             </span>
           </div>
           <span className="text">预估另需配送费 ¥5</span>
         </div>
         {/* 结算 or 起送 */}
-        {false ? (
+        {cartList.length > 0 ? (
           <div className="goToPreview">去结算</div>
         ) : (
           <div className="minFee">¥20起送</div>
