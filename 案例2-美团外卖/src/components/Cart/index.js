@@ -9,7 +9,7 @@ import {
   decreCount,
   clearCount,
 } from "../../store/modules/takeaway"; 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Cart = () => {
   // 从store中获取数据
@@ -32,6 +32,12 @@ const Cart = () => {
     }
     setVisible(true)
   }
+
+  useEffect(() => {
+    if (cartList.length === 0) {
+      setVisible(false);
+    }
+  }, [cartList]);
 
   
   return (

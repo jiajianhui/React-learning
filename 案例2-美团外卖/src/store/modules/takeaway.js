@@ -53,11 +53,11 @@ const foodsStore = createSlice({
         // count减
         decreCount(state, action) {
             const item = state.cartList.find(item => item.id === action.payload.id)
-            // 判断count是否为0
+            item.count--;
+            // 如果count为0，则将该商品从cartlist中移除
             if (item.count === 0) {
-                return
+              state.cartList = state.cartList.filter(cartItem => cartItem.id !== item.id);
             }
-            item.count--
         },
         // 清空count
         clearCount(state) {
