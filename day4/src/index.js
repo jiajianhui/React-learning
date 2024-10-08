@@ -1,18 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import {createBrowserRouter, RouterProvider} from 'react-router-dom'
-// 1、创建router实例对象并配置路由对应关系
-const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <div>登录页</div>,
-  },
-  {
-    path: "/article",
-    element: <div>文章页</div>,
-  },
-]);
+import { RouterProvider} from 'react-router-dom'
+// 1、导入router
+import router from './router';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
