@@ -9,8 +9,14 @@ import router from './router';
 // 导入主题配置文件
 import './theme.css'
 
+// 注入redux
+import {Provider} from 'react-redux'
+import store from './store';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <Provider store={store}>
     <RouterProvider router={router}></RouterProvider>
+  </Provider>
 );
 
