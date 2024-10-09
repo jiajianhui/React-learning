@@ -7,6 +7,7 @@ import List from "../pages/List";
 import Layout from "../pages/Layout";
 import Board from "../pages/Board";
 import Info from "../pages/Info";
+import NotFound from "../pages/NotFound";
 
 // 2、创建router实例对象并配置路由对应关系
 const router = createBrowserRouter([
@@ -39,6 +40,12 @@ const router = createBrowserRouter([
     // 配合params传参
     path: "/list/:id/:name",
     element: <List />,
+  },
+
+  // 404
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
