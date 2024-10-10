@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router-dom'
 // 导入异步获取数据的方法
 import { getBillList } from '../../store/modules/billStore'
 // 导入组件
-import {Button, TabBar} from 'antd-mobile'
+import {TabBar} from 'antd-mobile'
 // 导入css
 import './index.scss'
 
