@@ -4,9 +4,11 @@ import { NavBar, DatePicker } from "antd-mobile";
 // 导入样式
 import './index.scss'
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import classnames from 'classnames'
 import dayjs from "dayjs";
+import {useSelector} from 'react-redux'
+import _ from 'lodash'
 
 const Month = () => {
 
@@ -29,6 +31,15 @@ const Month = () => {
   const [currentDate, setCurrentDate] = useState(() => {
     return dayjs(new Date()).format('YYYY-MM')
   }) 
+
+  // 将数据按月分组
+  // 1、从Redux中拿到数组
+  // 2、使用useMemo进行数据二次处理
+  // 3、使用lodash实现数据按月分组
+  const billList = useSelector(state => state.bill.billList)
+  const monthGroup = useMemo(() => {
+    return _.groupBy(billList, (item) => dayjs(item.date).format('YYYY-MM'));
+  }, [billList])
 
   return (
     <div className="monthBox">
@@ -57,7 +68,7 @@ const Month = () => {
             <span className="type">结余</span>
           </div>
         </div>
-        
+
       </div>
 
       {/* 时间选择器组件 */}
