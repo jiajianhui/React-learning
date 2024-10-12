@@ -19,9 +19,19 @@ const Month = () => {
   const [dateVisible, setDateVisible] = useState(false)
   // 确认函数
   const onConfirm = (date) => {
-    setDateVisible(false)
-    // 赋值时间
-    setCurrentDate(dayjs(date).format('YYYY-MM'))
+    setDateVisible(false);
+    // 将选择的时间格式化
+    const formatDate = dayjs(date).format("YYYY-MM");
+    // 进行赋值
+    setCurrentDate(formatDate);
+
+    // 拿到当前月份中的数据——对象取值
+    // 只有当前月中有数据，才进行赋值，没有的话，清空数组
+    if (monthGroup[formatDate]) {
+      setCurrentMonthList(monthGroup[formatDate]);
+    } else {
+      setCurrentMonthList([]);
+    }
   }
 
   // 将datePicker的日期与时间区域联动
@@ -35,11 +45,36 @@ const Month = () => {
   // 将数据按月分组
   // 1、从Redux中拿到数组
   // 2、使用useMemo进行数据二次处理
-  // 3、使用lodash实现数据按月分组
+  // 3、使用lodash实现数据按月分组——返回对象
   const billList = useSelector(state => state.bill.billList)
   const monthGroup = useMemo(() => {
     return _.groupBy(billList, (item) => dayjs(item.date).format('YYYY-MM'));
   }, [billList])
+
+
+  // 计算选择月份后的统计数据
+  // 1、确认获取当前月份
+  // 2、在确认函数中，在monthGroup中，获取当前月（key）对应的数组（通过对象取值拿到）——使用useState维护
+  // 3、基于该数组进行计算
+  const [currentMonthList, setCurrentMonthList] = useState([]);
+  const monthResult = useMemo(() => {
+    // 计算出 支出、收入、结余
+    // 判断当前月份中是否有数据
+    if (currentMonthList.length === 0) {
+      return {
+        pay: 0,
+        income: 0,
+        total: 0,
+      }; 
+    }
+    const pay = currentMonthList.filter(item => item.type === 'pay').reduce((a,c) => a + c.money, 0)
+    const income = currentMonthList.filter(item => item.type === "income").reduce((a,c) => a + c.money, 0);
+    return {
+      pay,
+      income,
+      total: income + pay
+    }
+  }, [currentMonthList])
 
   return (
     <div className="monthBox">
@@ -56,15 +91,15 @@ const Month = () => {
         {/* 统计区域 */}
         <div className="overview">
           <div className="item">
-            <span className="money">180.0</span>
+            <span className="money">{monthResult.pay}</span>
             <span className="type">支出</span>
           </div>
           <div className="item">
-            <span className="money">200.0</span>
+            <span className="money">{monthResult.income}</span>
             <span className="type">收入</span>
           </div>
           <div className="item">
-            <span className="money">20.0</span>
+            <span className="money">{monthResult.total}</span>
             <span className="type">结余</span>
           </div>
         </div>
