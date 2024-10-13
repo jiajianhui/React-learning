@@ -4,7 +4,7 @@ import { NavBar, DatePicker } from "antd-mobile";
 // 导入样式
 import './index.scss'
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import classnames from 'classnames'
 import dayjs from "dayjs";
 import {useSelector} from 'react-redux'
@@ -26,7 +26,7 @@ const Month = () => {
     setCurrentDate(formatDate);
 
     // 拿到当前月份中的数据——对象取值
-    // 只有当前月中有数据，才进行赋值，没有的话，清空数组
+    // 只有当前月中有数据，才进行赋值，没有的话，清空数组；触发monthResult的重新计算
     if (monthGroup[formatDate]) {
       setCurrentMonthList(monthGroup[formatDate]);
     } else {
@@ -76,12 +76,22 @@ const Month = () => {
     }
   }, [currentMonthList])
 
+
+  // 初始化时，获取当前月的统计数据
+  useEffect(() => {
+    // 不管有没有数据，都会触发monthResult的重新计算
+    if (monthGroup[currentDate]) {
+      setCurrentMonthList(monthGroup[currentDate]);
+    } else {
+      setCurrentMonthList([])
+    }
+  }, [currentDate, monthGroup]);
+
   return (
     <div className="monthBox">
       <NavBar back={null}>月度账单</NavBar>
 
       <div className="header">
-
         {/* 时间切换区域 */}
         <div className="date" onClick={() => setDateVisible(true)}>
           <span className="text">{currentDate}月账单</span>
@@ -91,19 +101,18 @@ const Month = () => {
         {/* 统计区域 */}
         <div className="overview">
           <div className="item">
-            <span className="money">{monthResult.pay}</span>
+            <span className="money">{monthResult.pay.toFixed(2)}</span>
             <span className="type">支出</span>
           </div>
           <div className="item">
-            <span className="money">{monthResult.income}</span>
+            <span className="money">{monthResult.income.toFixed(2)}</span>
             <span className="type">收入</span>
           </div>
           <div className="item">
-            <span className="money">{monthResult.total}</span>
+            <span className="money">{monthResult.total.toFixed(2)}</span>
             <span className="type">结余</span>
           </div>
         </div>
-
       </div>
 
       {/* 时间选择器组件 */}
@@ -113,6 +122,7 @@ const Month = () => {
         onCancel={() => setDateVisible(false)}
         onConfirm={onConfirm}
         max={new Date()}
+        precision="month" //控制选择器精度
       />
     </div>
   );
