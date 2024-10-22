@@ -10,6 +10,9 @@ import dayjs from "dayjs";
 import {useSelector} from 'react-redux'
 import _ from 'lodash'
 
+// 导入 每日统计组件
+import DayBill from "./compoments/DayBill";
+
 const Month = () => {
 
   // 切换时间选择框
@@ -87,6 +90,19 @@ const Month = () => {
     }
   }, [currentDate, monthGroup]);
 
+
+  // 将当前月份的数据按每日进行分组
+  const dayGroup = useMemo(() => {
+    // 生成新的对象，以年月日为key
+    const groupData = _.groupBy(currentMonthList, item => dayjs(item.date).format('YYYY-MM-DD'))
+    // 拿到对象的所有key
+    const keys = Object.keys(groupData)  
+    return {
+      groupData,
+      keys
+    }
+  }, [currentMonthList])
+
   return (
     <div className="monthBox">
       <NavBar back={null}>月度账单</NavBar>
@@ -114,6 +130,11 @@ const Month = () => {
           </div>
         </div>
       </div>
+
+      {dayGroup.keys.map(key => {
+        // 依次将日期、账单数据（通过对象key取值拿到）传给子组件
+        return <DayBill key={key} date={key} billData={dayGroup.groupData[key]} />
+      })}
 
       {/* 时间选择器组件 */}
       <DatePicker

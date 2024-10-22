@@ -1,0 +1,42 @@
+.dayContainer {
+    background-color: white;
+    padding: 24px 30px;
+    margin-top: 12px;
+    border-radius: 14px;
+
+    .date {
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .overview {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .item {
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            &:last-of-type .money {
+                font-size: 18px;
+                font-weight: 600;
+            }
+
+            .type:not(:last-child) {
+                margin-right: 10px;
+            }
+            .income {
+                color: green;
+            }
+            .pay {
+                color: red;
+            }
+            .total {
+                margin-left: 10px;
+                opacity: 0.8;
+            }
+            
+        }
+    }
+}
