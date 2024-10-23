@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import classNames from 'classnames';
 // 导入样式
 import './index.scss'
 
@@ -15,27 +16,46 @@ const DayBill = ({ date, billData }) => {
     }
   }, [billData])
 
+  // 控制显示详情
+  const [showDetail,setShowDetail] = useState(false)
+
   return (
     <div className="dayContainer">
-      {/* 日期 */}
-      <div className="date">{date}</div>
-
-      {/* 总览 */}
-      <div className="overview">
-        <div className="item">
-          <span className="type pay">支出</span>
-          <span className="money">{dayResult.pay}</span>
+      <div className="dayHeader">
+        {/* 日期 */}
+        <div className="dateBox">
+          <div className="date">{date}</div>
+          <span className={classNames("arrow", showDetail && "expand")} onClick={() => setShowDetail(!showDetail)}></span>
         </div>
 
-        <div className="item">
-          <span className="type income">收入</span>
-          <span className="money">{dayResult.income}</span>
-        </div>
+        {/* 总览 */}
+        <div className="overview">
+          <div className="item">
+            <span className="type pay">支出</span>
+            <span className="money">{dayResult.pay.toFixed(2)}</span>
+          </div>
 
-        <div className="item">
-          <span className="money">{dayResult.total}</span>
-          <span className="type total">结余</span>
+          <div className="item">
+            <span className="type income">收入</span>
+            <span className="money">{dayResult.income.toFixed(2)}</span>
+          </div>
+
+          <div className="item">
+            <span className="money">{dayResult.total.toFixed(2)}</span>
+            <span className="type total">结余</span>
+          </div>
         </div>
+      </div>
+
+      {/* 详情 */}
+      <div className={classNames("detail", showDetail && "isShow")}>
+        {billData.map(item => {
+          return <div className="detailItem" key={item.id}>
+            <span className="name">{item.useFor}</span>
+            <span className={classNames('count', item.money < 0 && 'green')}>{item.money}</span>
+          </div>;
+        })}
+        
       </div>
     </div>
   );

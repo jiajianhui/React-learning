@@ -3,12 +3,36 @@
     padding: 24px 30px;
     margin-top: 12px;
     border-radius: 14px;
+    
+    .dateBox {
+        display: flex;
+        justify-content: space-between;
 
-    .date {
-        font-size: 17px;
-        font-weight: 600;
-        margin-bottom: 10px;
+        .date {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .arrow {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            margin-top: -4px;
+            margin-left: 9px;
+            border-top: 2px solid #121826;
+            border-left: 2px solid #121826;
+            transform: rotate(225deg);
+            transform-origin: center;
+            transition: all 0.3s;
+
+            &.expand {
+                transform: translate(0, 2px) rotate(45deg);
+            }
+        }
     }
+
+    
 
     .overview {
         display: flex;
@@ -17,9 +41,9 @@
         .item {
             display: flex;
             align-items: center;
-            font-size: 15px;
+            font-size: 14px;
             &:last-of-type .money {
-                font-size: 18px;
+                font-size: 17px;
                 font-weight: 600;
             }
 
@@ -33,8 +57,45 @@
                 color: red;
             }
             .total {
-                margin-left: 10px;
+                margin-left: 8px;
                 opacity: 0.8;
+            }
+            
+        }
+    }
+
+    // 详情
+    .detail {
+        border-top: 1px solid #dedede;
+        margin-top: 14px;
+        font-size: 16px;
+        font-weight: 500;
+
+        // 设置初始状态为隐藏
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease-in-out;
+
+        &.isShow {
+            max-height: 100px;  //足够大的值以适应内容
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .detailItem {
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-between;
+
+            .count {
+                color: green;
+
+                //& 是 Sass 中表示父元素的符号
+                &.green {
+                    color: red;
+                }
             }
             
         }
