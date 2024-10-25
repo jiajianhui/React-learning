@@ -1,0 +1,96 @@
+.container {
+    background-color: aquamarine;
+    .header {
+        padding: 0 20px;
+
+        .btns {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            align-items: center;
+            margin-top: 10px;
+
+            Button {
+                --border-color: none
+            }
+            .selected {
+                color: white;
+                --background-color: black
+            }
+        }
+
+        .inputBox {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border: 1px solid #dedede;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-top: 20px;
+
+            .date {
+                background-color: #e7e7e7;
+                border-radius: 8px;
+
+                .text {
+                    white-space: nowrap;
+                }
+            }
+
+            .input {
+                --text-align: right;
+                --font-size: 22px;
+            }
+
+            .yuan {
+                font-size: 20px;
+                font-weight: 500;
+                margin-left: 8px;
+            }
+        }
+    }
+
+    .billType {
+        background-color: white;
+        margin-top: 20px;
+        padding:  0 20px;
+        border-radius: 16px 16px 0 0 ;
+
+        .typeItem {
+            padding: 20px 0;
+
+            .title {
+                opacity: 0.6;
+            }
+
+            .list {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                padding: 10px;
+
+                .listItem {
+                    padding: 10px 20px;
+                    text-align: center;
+                    background-color: #f2f2f2;
+                    border-radius: 10px;
+                    border: 1px solid #dedede;
+                }
+            }
+        }
+    }
+
+    .save {
+        position: absolute;
+        bottom: 30px;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        
+        Button {
+            padding: 10px 0;
+            width: 30%;
+            border-radius: 10px;
+        }
+    }
+}
