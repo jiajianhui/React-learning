@@ -12,17 +12,45 @@ import { billListData } from '../../contant/billList';
 // 导入样式
 import './index.scss'
 
+// 导入新增账单方法
+import { addBillList } from '../../store/modules/billStore';
+import {useDispatch} from 'react-redux'
+
 
 const New = () => {
-
   // 控制时间选择器的显示
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
 
   // 控制账单类型切换
-  const [billType, setBillType] = useState('pay')
+  const [billType, setBillType] = useState("pay");
 
   // 导航方法
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  // 收集接口所需数据
+  // 1、使用useState维护输入框中的金额
+  const [money, setMoney] = useState(0);
+  const inputChange = (value) => {
+    setMoney(value);
+  };
+
+  // 2、使用useState维护账单类型
+  const [useFor, setUseFor] = useState("");
+
+  // 3、保存方法——将数据整合，然后触发提交
+  const dispatch = useDispatch();
+  const saveBill = () => {
+    const data = {
+      type: billType,
+      money: billType === "pay" ? -money : +money,
+      date: new Date(),
+      useFor: useFor,
+    };
+
+    console.log(data);
+    dispatch(addBillList(data))
+
+  };
 
   return (
     <div className="container">
@@ -65,7 +93,13 @@ const New = () => {
             />
           </Button>
           {/* 输入框 */}
-          <Input className="input" type="number" placeholder="0.00" />
+          <Input
+            className="input"
+            type="number"
+            placeholder="0.00"
+            value={money}
+            onChange={inputChange}
+          />
           <span className="yuan">¥</span>
         </div>
       </div>
@@ -82,9 +116,12 @@ const New = () => {
               <div className="list">
                 {item.list.map((item) => {
                   return (
-                    <div className="listItem" key={item.type}>
-                      {" "}
-                      {item.name}{" "}
+                    <div
+                      className="listItem"
+                      key={item.type}
+                      onClick={() => setUseFor(item.type)}
+                    >
+                      {item.name}
                     </div>
                   );
                 })}
@@ -95,8 +132,10 @@ const New = () => {
       </div>
 
       {/* 保存按钮 */}
-      <div className='save'>
-        <Button color='primary'>保存</Button>
+      <div className="save">
+        <Button color="primary" onClick={() => saveBill()}>
+          保存
+        </Button>
       </div>
     </div>
   );
