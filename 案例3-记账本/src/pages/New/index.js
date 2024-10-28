@@ -6,6 +6,9 @@ import classNames from 'classnames'
 // 导航相关
 import {useNavigate} from 'react-router-dom'
 
+// 时间格式化插件
+import dayjs from 'dayjs';
+
 // 导入数据
 import { billListData } from '../../contant/billList';
 
@@ -43,7 +46,7 @@ const New = () => {
     const data = {
       type: billType,
       money: billType === "pay" ? -money : +money,
-      date: new Date(),
+      date: selectedDate,
       useFor: useFor,
     };
 
@@ -51,6 +54,24 @@ const New = () => {
     dispatch(addBillList(data))
 
   };
+
+  // 使用useState维护当前选择的时间
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // 时间选择器确认函数
+  const dateConfirm = (value) => {
+    console.log(value);
+    setSelectedDate(value)
+    setVisible(false)
+  }
+
+  // 动态显示时间选择器文字
+  const dateText = () => {
+    const today = dayjs(new Date()).format("YYYY-MM-DD");
+    const selectedDay = dayjs(selectedDate).format("YYYY-MM-DD");
+    
+    return selectedDay === today ? "今天" : selectedDay;
+  }
 
   return (
     <div className="container">
@@ -83,13 +104,14 @@ const New = () => {
               setVisible(true);
             }}
           >
-            <div className="text">今天</div>
+            <div className="text">{dateText()}</div>
             <DatePicker
               title="时间选择"
               visible={visible}
               onCancel={() => setVisible(false)}
               defaultValue={new Date()}
               max={new Date()}
+              onConfirm={dateConfirm}
             />
           </Button>
           {/* 输入框 */}
@@ -117,7 +139,7 @@ const New = () => {
                 {item.list.map((item) => {
                   return (
                     <div
-                      className="listItem"
+                      className={classNames("listItem", useFor === item.type ? 'selected' : '')}
                       key={item.type}
                       onClick={() => setUseFor(item.type)}
                     >

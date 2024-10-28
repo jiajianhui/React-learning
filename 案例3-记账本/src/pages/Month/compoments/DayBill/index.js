@@ -3,6 +3,9 @@ import classNames from 'classnames';
 // 导入样式
 import './index.scss'
 
+// 中英文对应
+import { billTypeToName } from '../../../../contant/billList';
+
 const DayBill = ({ date, billData }) => {
 
   // 将拿到的billData进行统计计算
@@ -50,10 +53,14 @@ const DayBill = ({ date, billData }) => {
       {/* 详情 */}
       <div className={classNames("detail", showDetail && "isShow")}>
         {billData.map(item => {
-          return <div className="detailItem" key={item.id}>
-            <span className="name">{item.useFor}</span>
-            <span className={classNames('count', item.money < 0 && 'green')}>{item.money}</span>
-          </div>;
+          return (
+            <div className="detailItem" key={item.id}>
+              <span className="name">{billTypeToName[item.useFor]}</span>
+              <span className={classNames("count", item.money < 0 && "green")}>
+                {item.money}
+              </span>
+            </div>
+          );
         })}
         
       </div>
