@@ -1,7 +1,6 @@
 .dayContainer {
     background-color: white;
     padding: 24px 30px;
-    margin-top: 12px;
     border-radius: 14px;
     
     .dateBox {
@@ -88,6 +87,12 @@
             margin-top: 14px;
             display: flex;
             justify-content: space-between;
+
+            .iconBox {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
 
             .count {
                 color: green;

@@ -1,7 +1,10 @@
 import {NavBar, Button, Input, DatePicker} from 'antd-mobile'
 import './index.scss'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames'
+
+// 导入Icon组件
+import Icon from '../../components/Icon'
 
 // 导航相关
 import {useNavigate} from 'react-router-dom'
@@ -51,8 +54,7 @@ const New = () => {
     };
 
     console.log(data);
-    dispatch(addBillList(data))
-
+    dispatch(addBillList(data));
   };
 
   // 使用useState维护当前选择的时间
@@ -61,17 +63,36 @@ const New = () => {
   // 时间选择器确认函数
   const dateConfirm = (value) => {
     console.log(value);
-    setSelectedDate(value)
-    setVisible(false)
-  }
+    setSelectedDate(value);
+    setVisible(false);
+  };
 
   // 动态显示时间选择器文字
   const dateText = () => {
     const today = dayjs(new Date()).format("YYYY-MM-DD");
     const selectedDay = dayjs(selectedDate).format("YYYY-MM-DD");
-    
+
     return selectedDay === today ? "今天" : selectedDay;
-  }
+  };
+
+  // 动态获取billType的高度
+  const [billTypeHeight, setBillTypeHeight] =useState(0)
+  useEffect(() => {
+    // 获取dom节点
+    const navBar = document.querySelector(".adm-nav-bar");
+    const header = document.querySelector(".header");
+
+    console.log(navBar);
+    
+
+    // 获取对应高度
+    const navBarHeight = navBar.offsetHeight;
+    const headerHeight = header.offsetHeight;
+
+    // 计算高度billType的高度
+    setBillTypeHeight(window.innerHeight - navBarHeight - headerHeight)
+  })
+
 
   return (
     <div className="container">
@@ -127,7 +148,7 @@ const New = () => {
       </div>
 
       {/* 账单类型 */}
-      <div className="billType">
+      <div className="billType" style={{height: billTypeHeight - 20}}>
         {billListData[billType].map((item) => {
           return (
             <div className="typeItem" key={item.type}>
@@ -139,10 +160,14 @@ const New = () => {
                 {item.list.map((item) => {
                   return (
                     <div
-                      className={classNames("listItem", useFor === item.type ? 'selected' : '')}
+                      className={classNames(
+                        "listItem",
+                        useFor === item.type ? "selected" : ""
+                      )}
                       key={item.type}
                       onClick={() => setUseFor(item.type)}
                     >
+                      <Icon type={item.type} width={26} />
                       {item.name}
                     </div>
                   );

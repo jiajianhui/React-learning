@@ -5,6 +5,7 @@ import './index.scss'
 
 // 中英文对应
 import { billTypeToName } from '../../../../contant/billList';
+import Icon from '../../../../components/Icon';
 
 const DayBill = ({ date, billData }) => {
 
@@ -55,7 +56,14 @@ const DayBill = ({ date, billData }) => {
         {billData.map(item => {
           return (
             <div className="detailItem" key={item.id}>
-              <span className="name">{billTypeToName[item.useFor]}</span>
+
+              {/* 图标和名称 */}
+              <div className='iconBox'>
+                <Icon type={item.useFor} />
+                <span className="name">{billTypeToName[item.useFor]}</span>
+              </div>
+
+              {/* 金额 */}
               <span className={classNames("count", item.money < 0 && "green")}>
                 {item.money}
               </span>

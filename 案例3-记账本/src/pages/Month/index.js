@@ -103,6 +103,21 @@ const Month = () => {
     }
   }, [currentMonthList])
 
+  // 获取listBox的高度
+  const [boxHeight, setBoxHeight] = useState(0);
+  useEffect(() => {
+    // 获取dom节点
+    const navBar = document.querySelector(".adm-nav-bar");
+    const header = document.querySelector(".header");
+
+    // 获取dom的高度
+    const navBarHeight = navBar.offsetHeight
+    const headerHeight = header.offsetHeight;
+
+    // 得到listBox的高度
+    setBoxHeight(window.innerHeight - navBarHeight - headerHeight - 64)
+  })
+
   return (
     <div className="monthBox">
       <NavBar back={null}>月度账单</NavBar>
@@ -131,10 +146,15 @@ const Month = () => {
         </div>
       </div>
 
-      {dayGroup.keys.map(key => {
-        // 依次将日期、账单数据（通过对象key取值拿到）传给子组件
-        return <DayBill key={key} date={key} billData={dayGroup.groupData[key]} />
-      })}
+      {/* 账单列表 */}
+      <div className="listBox" style={{height: boxHeight}}>
+        {dayGroup.keys.map((key) => {
+          // 依次将日期、账单数据（通过对象key取值拿到）传给子组件
+          return (
+            <DayBill key={key} date={key} billData={dayGroup.groupData[key]} />
+          );
+        })}
+      </div>
 
       {/* 时间选择器组件 */}
       <DatePicker
